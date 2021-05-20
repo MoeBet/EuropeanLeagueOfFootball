@@ -45,10 +45,10 @@ class DriveForm(FlaskForm):
 class PlaysForm(FlaskForm):
     down = SelectField('Down', choices=['1', '2', '3', '4'], validators=[DataRequired()])
     yards_to_go = StringField('Yards to go', validators=[DataRequired()])
-    field_pos_half = StringField('FieldPosition own or opponent half', validators=[DataRequired()])
+    field_pos_half = SelectField('FieldPosition', choices=['Own', 'Opponents'], validators=[DataRequired()])
     field_pos_yard = StringField('FieldPosition Yard', validators=[DataRequired()])
     time = StringField('Gametime', validators=[DataRequired()])
-    shotgun = StringField('Shotgun Formation', validators=[DataRequired()])
+    shotgun = SelectField('Shotgun Formation', choices=['No', 'Yes'], validators=[DataRequired()])
     play_description = StringField('Play description e.g. S.Darnold pass incomplete deep right to C.Herndon.', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
@@ -151,26 +151,34 @@ def playbyplay():
 
     return render_template("addplay.html", form=form)
 
-@app.route("/edit", methods=['GET', 'POST'])
-def edit():
-    if request.method == 'POST':
-        book_id = request.form['id']
-        book_to_update = Books.query.get(book_id)
-        book_to_update.rating = request.form['rating']
-        db.session.commit()
-        return redirect(url_for('home'))
-    book_id = request.args.get('id')
-    book_selected = Books.query.get(book_id)
-    return render_template("edit.html", book=book_selected)
+# @app.route("/game/<int:index>")
+# def show_game(index):
+    
 
+# @app.route("/edit", methods=['GET', 'POST'])
+# def edit():
+#     if request.method == 'POST':
+#         book_id = request.form['id']
+#         book_to_update = Books.query.get(book_id)
+#         book_to_update.rating = request.form['rating']
+#         db.session.commit()
+#         return redirect(url_for('home'))
+#     book_id = request.args.get('id')
+#     book_selected = Books.query.get(book_id)
+#     return render_template("edit.html", book=book_selected)
+#
+#
+# @app.route("/delete", methods=['GET', 'POST'])
+# def delete():
+#     book_id = request.args.get('id')
+#     book_to_delete = Books.query.get(book_id)
+#     db.session.delete(book_to_delete)
+#     db.session.commit()
+#     return redirect(url_for('home'))
 
-@app.route("/delete", methods=['GET', 'POST'])
-def delete():
-    book_id = request.args.get('id')
-    book_to_delete = Books.query.get(book_id)
-    db.session.delete(book_to_delete)
-    db.session.commit()
-    return redirect(url_for('home'))
+@app.route("/test")
+def tryit():
+    return render_template("landingpage.html")
 
 
 if __name__ == "__main__":

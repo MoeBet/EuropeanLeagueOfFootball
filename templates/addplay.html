@@ -1,15 +1,21 @@
 {% import "bootstrap/wtf.html" as wtf %}
+{% extends 'bootstrap/base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>European League of Football Stats</title>
-</head>
-<body>
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='css/styles.css')}}"
+{% endblock %}
 
-{{ wtf.quick_form(form, novalidate=True)}}
+{% block title %}European League of Football Stats{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-6">
+        {{ wtf.quick_form(form, novalidate=True)}}
+    </div>
+</div>
 
 <a href="/">Home</a>
-</body>
-</html>
+
+{% endblock %}

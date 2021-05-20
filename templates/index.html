@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>European League of Football Stats</title>
-</head>
-<body>
+{% extends 'bootstrap/base.html' %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='css/styles.css')}}"
+      {% endblock %}
+
+{% block title %}European League of Football Stats{% endblock %}
+
+{% block content %}
 <h1>European League of Football Stats</h1>
 {% if game_info == []: %}
 
@@ -12,9 +15,11 @@
 
 {% else: %}
 
-<h2>{{game_info[0].home}} vs. {{game_info[0].away}}</h2>
-
+    {% for game in game_info:%}
+        <h2>{{game.home}} vs. {{game.away}} - {{game.date}}</h2>
+    {% endfor %}
 {% endif %}
-<a href="/addgame">Add Game</a> <a href="/drive">Add Drive</a> <a href="/play">Add Play</a>
-</body>
-</html>
+
+<a class="btn btn-primary btn-lg" href="/addgame" role="button">Add Game</a> <a class="btn btn-primary btn-lg" href="/drive" role="button">Add Drive</a> <a class="btn btn-primary btn-lg" href="/play" role="button">Add Play</a>
+
+{% endblock %}
