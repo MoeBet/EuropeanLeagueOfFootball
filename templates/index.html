@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>European League of Football Stats</title>
+</head>
+<body>
+<h1>European League of Football Stats</h1>
+{% if game_info == []: %}
+
+<h5>No Game Selected Yet</h5>
+
+{% else: %}
+
+<h2>{{game_info[0].home}} vs. {{game_info[0].away}}</h2>
+
+{% endif %}
+<a href="/addgame">Add Game</a> <a href="/drive">Add Drive</a> <a href="/play">Add Play</a>
+</body>
+</html>
