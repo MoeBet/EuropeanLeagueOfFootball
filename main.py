@@ -98,6 +98,9 @@ def home():
     plays = db.session.query(Plays).all()
     return render_template("index.html", game_info=game_info, overall_drive=overall_drive, plays=plays)
 
+@app.route('/base')
+def base():
+    return render_template("base.html")
 
 @app.route("/addgame", methods=['GET', 'POST'])
 def add():
