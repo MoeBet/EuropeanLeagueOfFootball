@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, DateField, TimeField, BooleanField
+from wtforms import StringField, SubmitField, SelectField, DateField, TimeField, RadioField
 from wtforms.validators import DataRequired
 from flask_bootstrap import Bootstrap
 
@@ -14,6 +14,7 @@ db = SQLAlchemy(app)
 Bootstrap(app)
 
 
+# Forms
 class GameInfoForm(FlaskForm):
     home = SelectField('Home Team', choices=['Barcelona Dragons', 'Berlin Thunder', 'Cologne Centurions',
                                              'Frankfurt Galaxy', 'Hamburg Sea Devils', 'Leipzig Kings',
@@ -36,8 +37,9 @@ class DriveForm(FlaskForm):
                                                                   'Missed FG', 'Punt'], validators=[DataRequired()])
     time_lost = StringField('Game-Time Ball Lost e.g. 14:00', validators=[DataRequired()])
     last_snap = StringField('Drive Ended e.g. HSD 45', validators=[DataRequired()])
-    how_given_up = SelectField('How Ball Given Up', choices=['Downs', 'End of Game', 'Field Goal', 'Fumble', 'Interception',
-                                                             'Missed FG', 'Punt', 'Touchdown'],
+    how_given_up = SelectField('How Ball Given Up',
+                               choices=['Downs', 'End of Game', 'Field Goal', 'Fumble', 'Interception',
+                                        'Missed FG', 'Punt', 'Touchdown'],
                                validators=[DataRequired()])
     submit = SubmitField('Submit')
 
@@ -48,11 +50,13 @@ class PlaysForm(FlaskForm):
     field_pos_half = SelectField('FieldPosition', choices=['Own', 'Opponents'], validators=[DataRequired()])
     field_pos_yard = StringField('FieldPosition Yard', validators=[DataRequired()])
     time = StringField('Gametime', validators=[DataRequired()])
-    shotgun = SelectField('Shotgun Formation', choices=['No', 'Yes'], validators=[DataRequired()])
-    play_description = StringField('Play description e.g. S.Darnold pass incomplete deep right to C.Herndon.', validators=[DataRequired()])
+    shotgun = RadioField('Shotgun Formation', choices=['No', 'Yes'], validators=[DataRequired()])
+    play_description = StringField('Play description e.g. S.Darnold pass incomplete deep right to C.Herndon.',
+                                   validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
+# Database
 class GameInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     home = db.Column(db.String, nullable=False)
@@ -100,13 +104,13 @@ def add():
     form = GameInfoForm()
     if request.method == 'POST':
         new_game = GameInfo(
-                            home=request.form["home"],
-                            away=request.form["away"],
-                            date=request.form["date"],
-                            time=request.form["time"],
-                            weather=request.form["weather"],
-                            stadium=request.form["stadium"]
-                            )
+            home=request.form["home"],
+            away=request.form["away"],
+            date=request.form["date"],
+            time=request.form["time"],
+            weather=request.form["weather"],
+            stadium=request.form["stadium"]
+        )
         db.session.add(new_game)
         db.session.commit()
         return redirect(url_for('home'))
@@ -119,41 +123,43 @@ def add_drive():
     form = DriveForm()
     if request.method == 'POST':
         new_drive = OverallDrive(
-                                 time_received=request.form["time_received"],
-                                 how_ball_obtained=request.form["how_ball_obtained"],
-                                 time_lost=request.form["time_lost"],
-                                 drive_began=request.form["drive_began"],
-                                 last_snap=request.form["last_snap"],
-                                 how_given_up=request.form["how_given_up"],
-                                 )
+            time_received=request.form["time_received"],
+            how_ball_obtained=request.form["how_ball_obtained"],
+            time_lost=request.form["time_lost"],
+            drive_began=request.form["drive_began"],
+            last_snap=request.form["last_snap"],
+            how_given_up=request.form["how_given_up"],
+        )
         db.session.add(new_drive)
         db.session.commit()
         return redirect(url_for('home'))
 
     return render_template("adddrive.html", form=form)
 
+
 @app.route("/play", methods=['GET', 'POST'])
 def playbyplay():
     form = PlaysForm()
     if request.method == 'POST':
         new_play = Plays(
-                         down=request.form["down"],
-                         yards_to_go=request.form["yards_to_go"],
-                         field_pos_half=request.form["field_pos_half"],
-                         field_pos_yard=request.form["field_pos_yard"],
-                         time=request.form["time"],
-                         shotgun=request.form["shotgun"],
-                         play_description=request.form["play_description"],
-                         )
+            down=request.form["down"],
+            yards_to_go=request.form["yards_to_go"],
+            field_pos_half=request.form["field_pos_half"],
+            field_pos_yard=request.form["field_pos_yard"],
+            time=request.form["time"],
+            shotgun=request.form["shotgun"],
+            play_description=request.form["play_description"],
+        )
         db.session.add(new_play)
         db.session.commit()
         return redirect(url_for('home'))
 
     return render_template("addplay.html", form=form)
 
+
 # @app.route("/game/<int:index>")
 # def show_game(index):
-    
+
 
 # @app.route("/edit", methods=['GET', 'POST'])
 # def edit():
