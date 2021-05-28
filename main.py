@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, DateTimeField, RadioField
+from wtforms import StringField, SubmitField, SelectField, DateTimeField, RadioField, DateField, TextAreaField
 from wtforms.validators import DataRequired
 from flask_bootstrap import Bootstrap
 
@@ -22,7 +22,7 @@ class GameInfoForm(FlaskForm):
     away = SelectField('Away Team', choices=['Barcelona Dragons', 'Berlin Thunder', 'Cologne Centurions',
                                              'Frankfurt Galaxy', 'Hamburg Sea Devils', 'Leipzig Kings',
                                              'Panthers Wroclaw', 'Stuttgart Surge'], validators=[DataRequired()])
-    date = DateTimeField('Date d/m/y', format='%d/%m/%Y', validators=[DataRequired()])
+    date = DateField('Date d/m/y', validators=[DataRequired()])
     time = DateTimeField('Start Time', format='%h/%m', validators=[DataRequired()])
     weather = SelectField(u'Weather', choices=['Sunny', 'Windy', 'Cloudy', 'Rain', 'Heavy Rain', 'Snow'],
                           validators=[DataRequired()])
@@ -48,11 +48,10 @@ class PlaysForm(FlaskForm):
     down = RadioField(choices=['1', '2', '3', '4'], validators=[DataRequired()])
     yards_to_go = StringField('Yards to go', validators=[DataRequired()])
     field_pos_half = RadioField('FieldPosition', choices=['Own', 'Opponents'], validators=[DataRequired()])
-    field_pos_yard = StringField('FieldPosition Yard', validators=[DataRequired()])
+    field_pos_yard = StringField('Field Position', validators=[DataRequired()])
     time = StringField('Gametime', validators=[DataRequired()])
     shotgun = RadioField('Formation', choices=[('Shotgun'), ('Under Center'), ('Wildcat')], validators=[DataRequired()])
-    play_description = StringField('Play description e.g. S.Darnold pass incomplete deep right to C.Herndon.',
-                                   validators=[DataRequired()])
+    play_description = TextAreaField(label=None, validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
@@ -160,8 +159,17 @@ def playbyplay():
     return render_template("addplay.html", form=form)
 
 
-# @app.route("/game/<int:index>")
-# def show_game(index):
+@app.route("/game/<int:index>")
+def show_game(index):
+    game_info = GameInfo.query.get(index)
+    drive_info = OverallDrive.query.get(index)
+    if game_info.id == index:
+        requested_game = db.session.query(GameInfo).all()[index]
+        requested_drives = db.session.query(OverallDrive).all()[index-4]
+
+
+    return render_template("game.html", game=requested_game, drives=requested_drives)
+
 
 
 # @app.route("/edit", methods=['GET', 'POST'])

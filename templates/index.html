@@ -16,24 +16,13 @@ European League of Football Stats
             <h5>No Game Selected Yet</h5>
         {% else: %}
             {% for game in game_info:%}
-        <h2>{{game.home}} vs. {{game.away}} - {{game.date}}</h2>
+        <a class="game-link" href="{{ url_for('show_game', index=game.id)}}"><h2>{{game.home}} vs. {{game.away}} - {{game.date}}</h2></a>
         {% endfor %}
         {% endif %}
     </div>
 </div>
 </section>
 
-<div class="row">
-    <div class="col-lg-4">
-        <a class="btn btn-outline-light btn-lg add-btn" href="/addgame" role="button">Add Game</a>
-    </div>
-    <div class="col-lg-4">
-        <a class="btn btn-outline-light btn-lg add-btn" href="/drive" role="button">Add Drive</a>
-    </div>
-    <div class="col-lg-4">
-        <a class="btn btn-outline-light btn-lg add-btn" href="/play" role="button">Add Play</a>
-    </div>
-</div>
 
 
 {% endblock %}

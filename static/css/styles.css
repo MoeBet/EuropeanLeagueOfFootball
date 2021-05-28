@@ -15,6 +15,14 @@ p {
     color: #ff4c68;
 }
 
+a {
+    text-decoration: none;
+}
+
+h2:hover {
+    color: #ff4c68;
+}
+
 body {
     margin: 3%;
     background-color: lightgrey;
@@ -41,8 +49,6 @@ body {
   font-size: 2rem;
   line-height: 1.5;
   font-weight: 400;
-  color: #ff4c68;
-  font-color: #ff4c68;
 }
 
 .football-picture{
