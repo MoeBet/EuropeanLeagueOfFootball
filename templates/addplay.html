@@ -24,6 +24,15 @@
       <form action="" method="post" class="form" role="form">
         {{ form.csrf_token() }}
        <d1>
+           <p>Quarter</p>
+        {% for subfield in form.quarter: %}
+            <tr>
+            <td> {{ subfield }} </td>
+            <td> {{ subfield.label }} </td>
+            </tr>
+        {% endfor %}
+        <br>
+        <br>
         <p>Select the Down</p>
         {% for subfield in form.down: %}
             <tr>
@@ -34,14 +43,17 @@
         {% endfor %}
         <br>
         <br>
+        <p>Yards to go</p>
         {{ wtf.form_field(form.yards_to_go, class='form-control', placeholder='yards to go') }}
         <br>
         <p>Select the half</p>
         {{ wtf.form_field(form.field_pos_half, class='form-control',) }}
         <br>
+        <p>Select the field position</p>
         {{ wtf.form_field(form.field_pos_yard, class='form-control', placeholder='Field Position e.g. 40') }}
         <br>
-        {{ wtf.form_field(form.time, class='form-control', placeholder='Gametime e.g. 12:30') }}
+        <p>Game Time</p>
+        {{ wtf.form_field(form.time, class='form-control', placeholder='Game Time e.g. 12:30') }}
         <br>
         <p>Select the Formation</p>
         {{ wtf.form_field(form.shotgun, class='form-control', placeholder='yards to go') }}
@@ -54,7 +66,5 @@
       </form>
     </div>
 </div>
-
-<a href="/" class="btn btn-dark btn-block">Home</a>
 
 {% endblock %}

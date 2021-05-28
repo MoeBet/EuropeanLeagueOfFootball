@@ -31,6 +31,7 @@ class GameInfoForm(FlaskForm):
 
 
 class DriveForm(FlaskForm):
+    quarter = RadioField(choices=['1', '2', '3', '4'], validators=[DataRequired()])
     time_received = StringField('Game-Time Ball Received e.g. 14:20', validators=[DataRequired()])
     drive_began = StringField('Drive Began e.g. HSD 9', validators=[DataRequired()])
     how_ball_obtained = SelectField('How Ball Obtained', choices=['Downs', 'Fumble', 'Interception', 'Kickoff',
@@ -45,6 +46,7 @@ class DriveForm(FlaskForm):
 
 
 class PlaysForm(FlaskForm):
+    quarter = RadioField(choices=['1', '2', '3', '4'], validators=[DataRequired()])
     down = RadioField(choices=['1', '2', '3', '4'], validators=[DataRequired()])
     yards_to_go = StringField('Yards to go', validators=[DataRequired()])
     field_pos_half = RadioField('FieldPosition', choices=['Own', 'Opponents'], validators=[DataRequired()])
@@ -68,6 +70,7 @@ class GameInfo(db.Model):
 
 class OverallDrive(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    quarter = db.Column(db.String, nullable=True)
     time_received = db.Column(db.String, nullable=True)
     how_ball_obtained = db.Column(db.String, nullable=True)
     time_lost = db.Column(db.String, nullable=True)
@@ -78,6 +81,7 @@ class OverallDrive(db.Model):
 
 class Plays(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    quarter = db.Column(db.String, nullable=True)
     down = db.Column(db.String, nullable=False)
     yards_to_go = db.Column(db.String, nullable=False)
     field_pos_half = db.Column(db.String, nullable=False)
@@ -125,6 +129,7 @@ def add_drive():
     form = DriveForm()
     if request.method == 'POST':
         new_drive = OverallDrive(
+            quarter=request.form["quarter"],
             time_received=request.form["time_received"],
             how_ball_obtained=request.form["how_ball_obtained"],
             time_lost=request.form["time_lost"],
@@ -144,6 +149,7 @@ def playbyplay():
     form = PlaysForm()
     if request.method == 'POST':
         new_play = Plays(
+            quarter=request.form["quarter"],
             down=request.form["down"],
             yards_to_go=request.form["yards_to_go"],
             field_pos_half=request.form["field_pos_half"],
@@ -162,13 +168,13 @@ def playbyplay():
 @app.route("/game/<int:index>")
 def show_game(index):
     game_info = GameInfo.query.get(index)
-    drive_info = OverallDrive.query.get(index)
+    drive_info = db.session.query(OverallDrive).all()
+    play_info = db.session.query(Plays).all()
+
     if game_info.id == index:
-        requested_game = db.session.query(GameInfo).all()[index]
-        requested_drives = db.session.query(OverallDrive).all()[index-4]
+        requested_game = db.session.query(GameInfo).all()[index-1]
 
-
-    return render_template("game.html", game=requested_game, drives=requested_drives)
+    return render_template("game.html", game=requested_game, drives=drive_info, plays=play_info)
 
 
 

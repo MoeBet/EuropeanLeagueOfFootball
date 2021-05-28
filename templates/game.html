@@ -4,5 +4,11 @@
 {% block content %}
 <h1>Test</h1>
 <h2>{{game.home}} vs. {{game.away}} - {{game.date}}</h2>
-<h2>{{drives.time_received}}</h2>
+
+    {% for drive in drives: %}
+        <h2>Quarter: {{drive.quarter}}</h2>
+    {% endfor %}
+
+
+
 {% endblock %}
