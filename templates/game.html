@@ -2,13 +2,34 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
-<h1>Test</h1>
-<h2>{{game.home}} vs. {{game.away}} - {{game.date}}</h2>
+<h1>Plays</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>quarter</th>
+            <th>down</th>
+            <th>yards to go</th>
+            <th>field_pos</th>
+            <th>field_pos_y</th>
+            <th>time</th>
+            <th>shotgun</th>
+        </tr>
+    </thead>
+        {% for play in plays %}
+        <tr>
+        <th>{{play.id}}</th>
+            <td>{{play.quarter}}</td>
+            <td>{{play.down}}</td>
+            <td>{{play.yards_to_go}}</td>
+            <td>{{play.field_pos_half}}</td>
+            <td>{{play.field_pos_yard}}</td>
+            <td>{{play.time}}</td>
+            <td>{{play.shotgun}}</td>
+        </tr>
+        {% endfor %}
 
-    {% for drive in drives: %}
-        <h2>Quarter: {{drive.quarter}}</h2>
-    {% endfor %}
-
+</table>
 
 
 {% endblock %}

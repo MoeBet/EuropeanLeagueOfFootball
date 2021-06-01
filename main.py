@@ -201,6 +201,7 @@ def show_game(index):
 
 @app.route("/test")
 def tryit():
+
     return render_template("landingpage.html")
 
 
