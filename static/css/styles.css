@@ -56,4 +56,17 @@ body {
 }
 
 .control-label {
-display: none;
+    display: none;
+}
+
+.yards-selector {
+    width: 50%
+}
+
+.form-control {
+    width: 50%
+}
+
+.game-time {
+    width: 5.5%;
+}

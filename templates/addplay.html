@@ -43,17 +43,34 @@
         {% endfor %}
         <br>
         <br>
+           <script>
+            function outputUpdate(yards_to_go) {
+            document.querySelector('#selected-yards').value = yards_to_go;
+            }
+            </script>
         <p>Yards to go</p>
-        {{ wtf.form_field(form.yards_to_go, class='form-control', placeholder='yards to go') }}
+        <div class="slidecontainer">
+        {{ wtf.form_field(form.yards_to_go, class='yards-selector form-control form-range', min="0", max="100",
+            step="0.5", list=tickmarks, oninput="outputUpdate(value)", placeholder='yards to go') }}
+            <output for="form.yards_to_go" id="selected-yards">{{ form.yards_to_go.data }}</output>
+
+        </div>
         <br>
         <p>Select the half</p>
         {{ wtf.form_field(form.field_pos_half, class='form-control',) }}
         <br>
+            <script>
+            function outputUpdate(field_position) {
+            document.querySelector('#selected-field-position').value = field_position;
+            }
+            </script>
         <p>Select the field position</p>
-        {{ wtf.form_field(form.field_pos_yard, class='form-control', placeholder='Field Position e.g. 40') }}
+        {{ wtf.form_field(form.field_pos_yard, class='yards-selector form-control form-range', min="0", max="100",
+            step="0.5", list=tickmarks, oninput="outputUpdate(value)",) }}
+            <output for="form.yards_to_go" id="selected-field-position">{{ form.field_pos_yard.data }}</output>
         <br>
         <p>Game Time</p>
-        {{ wtf.form_field(form.time, class='form-control', placeholder='Game Time e.g. 12:30') }}
+        {{ wtf.form_field(form.time, class='form-control game-time', min="00:00", max="15:00",) }}
         <br>
         <p>Select the Formation</p>
         {{ wtf.form_field(form.shotgun, class='form-control', placeholder='yards to go') }}

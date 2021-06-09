@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, DateTimeField, RadioField, DateField, TextAreaField
+from wtforms.fields.html5 import DecimalRangeField, TimeField
 from wtforms.validators import DataRequired
 from flask_bootstrap import Bootstrap
 
@@ -16,12 +17,11 @@ Bootstrap(app)
 
 # Forms
 class GameInfoForm(FlaskForm):
-    home = SelectField('Home Team', choices=['Barcelona Dragons', 'Berlin Thunder', 'Cologne Centurions',
-                                             'Frankfurt Galaxy', 'Hamburg Sea Devils', 'Leipzig Kings',
-                                             'Panthers Wroclaw', 'Stuttgart Surge'], validators=[DataRequired()])
-    away = SelectField('Away Team', choices=['Barcelona Dragons', 'Berlin Thunder', 'Cologne Centurions',
-                                             'Frankfurt Galaxy', 'Hamburg Sea Devils', 'Leipzig Kings',
-                                             'Panthers Wroclaw', 'Stuttgart Surge'], validators=[DataRequired()])
+    list_of_teams = ['Barcelona Dragons', 'Berlin Thunder', 'Cologne Centurions',
+                   'Frankfurt Galaxy', 'Hamburg Sea Devils', 'Leipzig Kings',
+                   'Panthers Wrocław', 'Stuttgart Surge']
+    home = SelectField('Home Team', choices=list_of_teams, validators=[DataRequired()])
+    away = SelectField('Away Team', choices=list_of_teams, validators=[DataRequired()])
     date = DateField('Date d/m/y', validators=[DataRequired()])
     time = DateTimeField('Start Time', format='%h/%m', validators=[DataRequired()])
     weather = SelectField(u'Weather', choices=['Sunny', 'Windy', 'Cloudy', 'Rain', 'Heavy Rain', 'Snow'],
@@ -48,10 +48,10 @@ class DriveForm(FlaskForm):
 class PlaysForm(FlaskForm):
     quarter = RadioField(choices=['1', '2', '3', '4'], validators=[DataRequired()])
     down = RadioField(choices=['1', '2', '3', '4'], validators=[DataRequired()])
-    yards_to_go = StringField('Yards to go', validators=[DataRequired()])
+    yards_to_go = DecimalRangeField('Yards to go', default=0, validators=[DataRequired()])
     field_pos_half = RadioField('FieldPosition', choices=['Own', 'Opponents'], validators=[DataRequired()])
-    field_pos_yard = StringField('Field Position', validators=[DataRequired()])
-    time = StringField('Gametime', validators=[DataRequired()])
+    field_pos_yard = DecimalRangeField('YardsFieldPosition', default=0, validators=[DataRequired()])
+    time = TimeField('Gametime', validators=[DataRequired()])
     shotgun = RadioField('Formation', choices=[('Shotgun'), ('Under Center'), ('Wildcat')], validators=[DataRequired()])
     play_description = TextAreaField(label=None, validators=[DataRequired()])
     submit = SubmitField('Submit')
